@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinematic Pulse Pack</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: #8a6e2f;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card-bg: #141414;
+    --text: #f0ece4;
+    --muted: #888;
+  }
+
+  body {
+    background: var(--black);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-image: radial-gradient(ellipse at 50% 0%, #1a1508 0%, #0a0a0a 70%);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  .header h1 span {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .header p {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+  }
+
+  .cards {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 36px 28px;
+    flex: 1;
+    min-width: 260px;
+    max-width: 300px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    animation: fadeUp 0.8s ease both;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .card:nth-child(1) { animation-delay: 0.1s; }
+  .card:nth-child(2) { animation-delay: 0.25s; }
+  .card:nth-child(3) { animation-delay: 0.4s; }
+
+  /* Cinemático — destacado */
+  .card.featured {
+    border-color: var(--gold-dim);
+    background: linear-gradient(160deg, #181408 0%, #141414 60%);
+    transform: scale(1.03);
+  }
+
+  .card.featured:hover {
+    transform: scale(1.03) translateY(-6px);
+  }
+
+  .badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    white-space: nowrap;
+  }
+
+  .card-tier {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .card.featured .card-name { color: var(--gold-light); }
+
+  .card-tagline {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+
+  .price {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #222;
+  }
+
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .card.featured .price-amount { color: var(--gold); }
+
+  .price-currency {
+    font-size: 16px;
+    font-weight: 300;
+    vertical-align: super;
+    margin-right: 2px;
+    color: var(--muted);
+  }
+
+  .price-period {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .features {
+    list-style: none;
+    flex: 1;
+    margin-bottom: 28px;
+  }
+
+  .features li {
+    font-size: 12px;
+    font-weight: 400;
+    color: #aaa;
+    padding: 7px 0;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+
+  .features li:last-child { border-bottom: none; }
+
+  .features li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--gold-dim);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .card.featured .features li::before { background: var(--gold); }
+  .card.featured .features li { color: #ccc; }
+
+  .section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-top: 16px;
+    margin-bottom: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #1e1e1e;
+    display: block;
+  }
+
+  .cta {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid #333;
+    color: var(--muted);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background: transparent;
+    width: 100%;
+  }
+
+  .cta:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  .card.featured .cta {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .card.featured .cta:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+
+  .footer-note {
+    margin-top: 36px;
+    text-align: center;
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 1.5px;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+
+  .footer-note span { color: var(--gold-dim); }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Línea decorativa */
+  .header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 20px auto 0;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">MaestrIA — Contenido Visual con IA</div>
+  <h1>Cinematic <span>Pulse Pack</span></h1>
+  <p>3 niveles · el cliente elige, siempre compra</p>
+</div>
+
+<div class="cards">
+
+  <!-- ESENCIAL -->
+  <div class="card">
+    <div class="card-tier">Nivel 01</div>
+    <div class="card-name">Esencial</div>
+    <div class="card-tagline">Para comenzar</div>
+    <div class="price">
+      <div class="price-amount"><span class="price-currency">$</span>897</div>
+      <div class="price-period">MXN · pago único</div>
+    </div>
+    <ul class="features">
+      <span class="section-label">Producción</span>
+      <li>10 imágenes cinematográficas IA</li>
+      <li>3 videos cinematográficos</li>
+      <li>1 personaje IA de la marca</li>
+      <span class="section-label">Entrega</span>
+      <li>Entregado en Drive organizado</li>
+    </ul>
+    <a class="cta" href="https://wa.me/524775342897?text=Hola%2C%20me%20interesa%20el%20Pack%20Esencial%20%24897" target="_blank">Elegir Esencial</a>
+  </div>
+
+  <!-- CINEMÁTICO -->
+  <div class="card featured">
+    <div class="badge">El más popular</div>
+    <div class="card-tier">Nivel 02</div>
+    <div class="card-name">Cinemático</div>
+    <div class="card-tagline">El más completo</div>
+    <div class="price">
+      <div class="price-amount"><span class="price-currency">$</span>1,499</div>
+      <div class="price-period">MXN · pago único</div>
+    </div>
+    <ul class="features">
+      <span class="section-label">Producción</span>
+      <li>15 imágenes cinematográficas IA</li>
+      <li>6 videos cinematográficos IA</li>
+      <li>1 personaje IA de la marca</li>
+      <span class="section-label">Servicio</span>
+      <li>Acompañamiento durante el proceso</li>
+      <li>Ajustes al contenido incluidos</li>
+      <li>Textos para captions y publicaciones</li>
+    </ul>
+    <a class="cta" href="https://wa.me/524775342897?text=Hola%2C%20me%20interesa%20el%20Pack%20Cinem%C3%A1tico%20%241%2C499" target="_blank">Elegir Cinemático</a>
+  </div>
+
+  <!-- DIRECTOR -->
+  <div class="card">
+    <div class="card-tier">Nivel 03</div>
+    <div class="card-name">Director</div>
+    <div class="card-tagline">Marca completa</div>
+    <div class="price">
+      <div class="price-amount"><span class="price-currency">$</span>2,797</div>
+      <div class="price-period">MXN · pago único</div>
+    </div>
+    <ul class="features">
+      <span class="section-label">Producción</span>
+      <li>20 imágenes cinematográficas IA</li>
+      <li>9 videos cinematográficos IA</li>
+      <li>4 reels editados</li>
+      <span class="section-label">Estrategia</span>
+      <li>Estrategia de contenido completa</li>
+      <li>Revisión de negocio</li>
+      <li>Mejora de procesos internos</li>
+    </ul>
+    <a class="cta" href="https://wa.me/524775342897?text=Hola%2C%20me%20interesa%20el%20Pack%20Director%20%242%2C797" target="_blank">Elegir Director</a>
+  </div>
+
+</div>
+
+<div class="footer-note">
+  Todos los packs incluyen <span>Asistente IA personalizado</span> para responder clientes y dar seguimiento · MaestrIA © 2026
+</div>
+
+</body>
+</html>
