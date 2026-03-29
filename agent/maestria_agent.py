@@ -1,11 +1,16 @@
 """
-MaestrIA Agent — Claude operates Higgsfield like a human.
+MaestrIA Agent — Claude opera Higgsfield como un humano.
 
-Flow:
-  1. User gives a high-level brief (text)
-  2. Claude decides: what prompt, what model, what settings, what references
-  3. Agent calls Higgsfield via tool calls
-  4. Results are downloaded and returned
+Modelos confirmados:
+  - Soul         /v1/text2image/soul          → imágenes (nativo Higgsfield)
+  - DoP-preview  /v1/image2video/dop          → video (plan Unlimited)
+  - Seedream     bytedance/seedream/v4/...    → imágenes alternativas
+
+Flujo:
+  1. Usuario da un brief (cualquier idioma)
+  2. Claude decide: qué generar, qué prompt, qué modelo, qué parámetros
+  3. Agente ejecuta las llamadas a Higgsfield
+  4. Los archivos se descargan a ./output/
 """
 
 import os
@@ -31,16 +36,16 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
-# Tool definitions exposed to Claude
+# Herramientas expuestas a Claude
 # ---------------------------------------------------------------------------
 
 TOOLS = [
     {
         "name": "generate_image",
         "description": (
-            "Generate a high-quality image from a text prompt using Higgsfield. "
-            "Use this when the brief asks for a still image, a reference frame, "
-            "or as a first step before animating."
+            "Genera una imagen de alta calidad con el modelo Soul de Higgsfield. "
+            "Úsalo cuando el brief pide una imagen fija, un frame de referencia, "
+            "o como primer paso antes de animar con DoP."
         ),
         "input_schema": {
             "type": "object",
@@ -48,69 +53,28 @@ TOOLS = [
                 "prompt": {
                     "type": "string",
                     "description": (
-                        "Detailed, cinematic prompt in English. Include style, lighting, "
-                        "camera angle, mood, color palette, and subject details."
+                        "Prompt cinematográfico detallado en inglés. Incluye: "
+                        "sujeto, iluminación, ángulo de cámara, estado de ánimo, "
+                        "paleta de color, textura, profundidad de campo."
                     ),
                 },
-                "resolution": {
+                "quality": {
                     "type": "string",
-                    "enum": ["1K", "2K", "4K"],
-                    "description": "Output resolution. Default: 2K",
+                    "enum": ["720p", "1080p"],
+                    "description": "Resolución de salida. Default: 1080p.",
                 },
                 "aspect_ratio": {
                     "type": "string",
                     "enum": ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9"],
-                    "description": "Aspect ratio. Default: 16:9 for cinematic.",
-                },
-                "camera_fixed": {
-                    "type": "boolean",
-                    "description": "Lock camera position for stable composition.",
-                },
-            },
-            "required": ["prompt"],
-        },
-    },
-    {
-        "name": "generate_video_from_text",
-        "description": (
-            "Generate a video from a text prompt. Best for scenes described "
-            "purely in words without a reference image."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "prompt": {
-                    "type": "string",
-                    "description": (
-                        "Detailed cinematic prompt in English. Describe the scene, "
-                        "camera movement, lighting, mood, and action."
-                    ),
+                    "description": "Relación de aspecto. 16:9 para cinematográfico.",
                 },
                 "model_key": {
                     "type": "string",
-                    "enum": ["kling-t2v", "wan-t2v", "sora-t2v", "veo-t2v"],
+                    "enum": ["soul", "seedream", "flux"],
                     "description": (
-                        "Video model to use. "
-                        "kling-t2v: best for realistic motion; "
-                        "wan-t2v: good quality/cost balance; "
-                        "sora-t2v: OpenAI, great physics; "
-                        "veo-t2v: Google, excellent cinematic quality."
+                        "Modelo de imagen. soul=nativo Higgsfield (default), "
+                        "seedream=ByteDance, flux=Flux Pro Kontext."
                     ),
-                },
-                "duration": {
-                    "type": "integer",
-                    "enum": [5, 10, 15],
-                    "description": "Video duration in seconds. Default: 5.",
-                },
-                "resolution": {
-                    "type": "string",
-                    "enum": ["720p", "1080p"],
-                    "description": "Output resolution. Default: 1080p.",
-                },
-                "aspect_ratio": {
-                    "type": "string",
-                    "enum": ["16:9", "9:16", "1:1"],
-                    "description": "Aspect ratio. 16:9 for cinematic, 9:16 for Reels/TikTok.",
                 },
             },
             "required": ["prompt"],
@@ -119,16 +83,16 @@ TOOLS = [
     {
         "name": "upload_reference_image",
         "description": (
-            "Upload a local image file to Higgsfield CDN. "
-            "Use this before generate_video_from_image or generate_video_with_frames "
-            "when the user provides a reference image path."
+            "Sube una imagen local al CDN de Higgsfield. "
+            "Úsalo cuando el usuario proporciona una imagen de referencia "
+            "antes de llamar a generate_video_from_image."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "path": {
                     "type": "string",
-                    "description": "Absolute or relative path to the local image file.",
+                    "description": "Ruta local a la imagen (absoluta o relativa).",
                 },
             },
             "required": ["path"],
@@ -137,41 +101,41 @@ TOOLS = [
     {
         "name": "generate_video_from_image",
         "description": (
-            "Animate an existing image into a video. "
-            "Use this when the user provides a reference image or when you just "
-            "generated an image and want to animate it."
+            "Anima una imagen en video usando DoP (Director of Photography), "
+            "el modelo cinematográfico nativo de Higgsfield. "
+            "Es el modelo principal del plan Unlimited. "
+            "Úsalo cuando tengas una imagen de referencia (subida o generada) "
+            "o cuando el brief pida movimiento a partir de una imagen."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "image_url": {
                     "type": "string",
-                    "description": "Higgsfield CDN URL of the image (from upload_reference_image or generate_image).",
+                    "description": "URL CDN de la imagen (de upload_reference_image o generate_image).",
                 },
                 "prompt": {
                     "type": "string",
                     "description": (
-                        "Motion/animation prompt. Describe how the scene should move: "
-                        "camera motion, wind, waves, character action, etc."
+                        "Prompt de movimiento en inglés. Describe el movimiento de cámara, "
+                        "acción del sujeto, viento, luz, atmósfera. "
+                        "Ej: 'slow dolly push-in, golden dust particles floating, "
+                        "cinematic depth of field, film grain'."
                     ),
                 },
-                "model_key": {
+                "quality": {
                     "type": "string",
-                    "enum": ["kling-i2v", "wan-i2v", "sora-i2v", "veo-i2v"],
-                    "description": "Image-to-video model. kling-i2v is the safest default.",
+                    "enum": ["dop-preview", "dop-turbo", "dop-lite"],
+                    "description": (
+                        "Calidad DoP. "
+                        "dop-preview=máxima calidad (plan Unlimited, default), "
+                        "dop-turbo=2× más rápido, "
+                        "dop-lite=más económico."
+                    ),
                 },
-                "duration": {
-                    "type": "integer",
-                    "enum": [5, 10, 15],
-                    "description": "Duration in seconds.",
-                },
-                "resolution": {
+                "motion_id": {
                     "type": "string",
-                    "enum": ["720p", "1080p"],
-                },
-                "aspect_ratio": {
-                    "type": "string",
-                    "enum": ["16:9", "9:16", "1:1"],
+                    "description": "UUID de preset de movimiento de cámara (opcional).",
                 },
             },
             "required": ["image_url", "prompt"],
@@ -180,168 +144,146 @@ TOOLS = [
     {
         "name": "generate_video_with_frames",
         "description": (
-            "Generate a video with full control over the first and/or last frame. "
-            "Use this for precise compositions or when you need the video to start "
-            "or end at a specific visual state."
+            "Genera video con control total del primer y/o último frame (DoP). "
+            "Úsalo para composiciones precisas o cuando el brief especifica "
+            "cómo debe empezar y terminar el clip."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "prompt": {
                     "type": "string",
-                    "description": "Motion and content description for the video.",
+                    "description": "Prompt de movimiento y contenido del video.",
                 },
                 "first_frame_url": {
                     "type": "string",
-                    "description": "CDN URL for the first frame (optional).",
+                    "description": "URL CDN del primer frame (opcional).",
                 },
                 "last_frame_url": {
                     "type": "string",
-                    "description": "CDN URL for the last frame (optional).",
+                    "description": "URL CDN del último frame (opcional).",
                 },
-                "model_key": {
+                "quality": {
                     "type": "string",
-                    "enum": ["kling-i2v", "wan-i2v", "sora-i2v", "veo-i2v"],
+                    "enum": ["dop-preview", "dop-turbo", "dop-lite"],
+                    "description": "Calidad DoP. Default: dop-preview.",
                 },
-                "duration": {"type": "integer", "enum": [5, 10, 15]},
-                "resolution": {"type": "string", "enum": ["720p", "1080p"]},
-                "aspect_ratio": {"type": "string", "enum": ["16:9", "9:16", "1:1"]},
             },
             "required": ["prompt"],
         },
     },
     {
         "name": "list_models",
-        "description": "List all available Higgsfield models and their keys.",
+        "description": "Lista los modelos disponibles en Higgsfield.",
         "input_schema": {"type": "object", "properties": {}},
     },
 ]
 
 
 # ---------------------------------------------------------------------------
-# Tool executor
+# Ejecutor de herramientas
 # ---------------------------------------------------------------------------
 
-def _timestamp() -> str:
+def _ts() -> str:
     return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def execute_tool(tool_name: str, tool_input: dict) -> dict:
-    """Execute a tool call and return a result dict."""
-
     if tool_name == "list_models":
         return hf.list_available_models()
 
     if tool_name == "upload_reference_image":
         path = tool_input["path"]
-        console.print(f"[yellow]↑ Uploading reference image:[/yellow] {path}")
+        console.print(f"[yellow]↑ Subiendo imagen de referencia:[/yellow] {path}")
         url = hf.upload_image(path)
-        console.print(f"[green]✓ Uploaded:[/green] {url}")
+        console.print(f"[green]✓ Subida:[/green] {url}")
         return {"cdn_url": url}
 
     if tool_name == "generate_image":
-        console.print(f"[yellow]🎨 Generating image...[/yellow]")
-        console.print(f"   Prompt: [dim]{tool_input['prompt'][:120]}...[/dim]")
+        console.print("[yellow]🎨 Generando imagen (Soul)...[/yellow]")
+        console.print(f"   [dim]{tool_input['prompt'][:120]}[/dim]")
         result = hf.generate_image(
             prompt=tool_input["prompt"],
-            resolution=tool_input.get("resolution", "2K"),
+            quality=tool_input.get("quality", "1080p"),
             aspect_ratio=tool_input.get("aspect_ratio", "16:9"),
-            camera_fixed=tool_input.get("camera_fixed", False),
-            model_key=tool_input.get("model_key", hf.DEFAULT_IMAGE_MODEL),
+            model_key=tool_input.get("model_key", hf.DEFAULT_IMAGE_ENDPOINT),
         )
-        out_path = str(OUTPUT_DIR / f"image_{_timestamp()}.jpg")
+        out_path = str(OUTPUT_DIR / f"image_{_ts()}.jpg")
         hf.download_file(result["url"], out_path)
-        console.print(f"[green]✓ Image saved:[/green] {out_path}")
-        result["local_path"] = out_path
-        return result
-
-    if tool_name == "generate_video_from_text":
-        console.print(f"[yellow]🎬 Generating video from text...[/yellow]")
-        console.print(f"   Model: [cyan]{tool_input.get('model_key', hf.DEFAULT_VIDEO_MODEL)}[/cyan]")
-        console.print(f"   Prompt: [dim]{tool_input['prompt'][:120]}...[/dim]")
-        result = hf.generate_video_from_text(
-            prompt=tool_input["prompt"],
-            duration=tool_input.get("duration", 5),
-            resolution=tool_input.get("resolution", "1080p"),
-            aspect_ratio=tool_input.get("aspect_ratio", "16:9"),
-            model_key=tool_input.get("model_key", hf.DEFAULT_VIDEO_MODEL),
-        )
-        out_path = str(OUTPUT_DIR / f"video_{_timestamp()}.mp4")
-        hf.download_file(result["url"], out_path)
-        console.print(f"[green]✓ Video saved:[/green] {out_path}")
+        console.print(f"[green]✓ Imagen guardada:[/green] {out_path}")
         result["local_path"] = out_path
         return result
 
     if tool_name == "generate_video_from_image":
-        console.print(f"[yellow]🎬 Animating image into video...[/yellow]")
-        console.print(f"   Model: [cyan]{tool_input.get('model_key', hf.DEFAULT_I2V_MODEL)}[/cyan]")
-        console.print(f"   Prompt: [dim]{tool_input['prompt'][:120]}...[/dim]")
+        quality = tool_input.get("quality", hf.DEFAULT_VIDEO_QUALITY)
+        console.print(f"[yellow]🎬 Animando imagen → video (DoP {quality})...[/yellow]")
+        console.print(f"   [dim]{tool_input['prompt'][:120]}[/dim]")
         result = hf.generate_video_from_image(
             image_url=tool_input["image_url"],
             prompt=tool_input["prompt"],
-            duration=tool_input.get("duration", 5),
-            resolution=tool_input.get("resolution", "1080p"),
-            aspect_ratio=tool_input.get("aspect_ratio", "16:9"),
-            model_key=tool_input.get("model_key", hf.DEFAULT_I2V_MODEL),
+            quality=quality,
+            motion_id=tool_input.get("motion_id"),
         )
-        out_path = str(OUTPUT_DIR / f"video_{_timestamp()}.mp4")
+        out_path = str(OUTPUT_DIR / f"video_{_ts()}.mp4")
         hf.download_file(result["url"], out_path)
-        console.print(f"[green]✓ Video saved:[/green] {out_path}")
+        console.print(f"[green]✓ Video guardado:[/green] {out_path}")
         result["local_path"] = out_path
         return result
 
     if tool_name == "generate_video_with_frames":
-        console.print(f"[yellow]🎬 Generating video with frame control...[/yellow]")
+        quality = tool_input.get("quality", hf.DEFAULT_VIDEO_QUALITY)
+        console.print(f"[yellow]🎬 Generando video con frame control (DoP {quality})...[/yellow]")
         result = hf.generate_video_with_frames(
             prompt=tool_input["prompt"],
             first_frame_url=tool_input.get("first_frame_url"),
             last_frame_url=tool_input.get("last_frame_url"),
-            duration=tool_input.get("duration", 5),
-            resolution=tool_input.get("resolution", "1080p"),
-            aspect_ratio=tool_input.get("aspect_ratio", "16:9"),
-            model_key=tool_input.get("model_key", hf.DEFAULT_I2V_MODEL),
+            quality=quality,
         )
-        out_path = str(OUTPUT_DIR / f"video_{_timestamp()}.mp4")
+        out_path = str(OUTPUT_DIR / f"video_{_ts()}.mp4")
         hf.download_file(result["url"], out_path)
-        console.print(f"[green]✓ Video saved:[/green] {out_path}")
+        console.print(f"[green]✓ Video guardado:[/green] {out_path}")
         result["local_path"] = out_path
         return result
 
-    return {"error": f"Unknown tool: {tool_name}"}
+    return {"error": f"Herramienta desconocida: {tool_name}"}
 
 
 # ---------------------------------------------------------------------------
-# Core agent loop
+# System prompt
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are MaestrIA, an expert AI cinematographer and creative director.
-You operate the Higgsfield AI video/image generation platform with full autonomy.
+SYSTEM_PROMPT = """Eres MaestrIA, un director de fotografía y cinematógrafo AI de élite.
+Controlas la plataforma Higgsfield con total autonomía usando estas herramientas.
 
-Your job:
-1. Receive a brief from the user (in Spanish or English — doesn't matter).
-2. Translate it into one or more Higgsfield API calls using your tools.
-3. Craft masterful, detailed cinematic prompts in English for each call.
-4. Select the right model, settings, and workflow.
-5. Execute everything and report what was created.
+MODELOS DISPONIBLES:
+- Soul (/v1/text2image/soul): generación de imágenes nativo Higgsfield
+- DoP-preview (/v1/image2video/dop): el modelo cinematográfico insignia, plan Unlimited
+- Seedream / Flux: modelos alternativos de imagen
 
-Guidelines for prompts you write:
-- Always write prompts in English (Higgsfield models perform best in English).
-- Be extremely detailed: lighting, camera lens/angle/movement, mood, color grade,
-  film stock, depth of field, time of day, weather, texture.
-- For videos: always include camera motion (slow push-in, dolly, pan, crane, handheld, etc.)
-- Use cinematic reference language: "anamorphic lens", "golden hour", "film grain",
-  "volumetric light", "bokeh", "cinematic color grade", etc.
-- Match the style and tone the user asks for.
+FLUJO DE TRABAJO ESTÁNDAR:
+1. Si el brief pide un video → genera primero la imagen con Soul, luego anímala con DoP
+2. Si el usuario da una imagen → súbela con upload_reference_image, luego DoP
+3. Si pide control inicio/fin → generate_video_with_frames con DoP
+4. Si solo pide una imagen → generate_image con Soul
 
-Workflow decision logic:
-- User gives image path → upload it first, then generate_video_from_image
-- User wants an image → generate_image
-- User wants a video with no reference → generate_video_from_text
-- User wants maximum control (start/end frame) → generate_video_with_frames
-- Multi-shot production → chain multiple calls in sequence
+REGLAS PARA TUS PROMPTS (siempre en inglés):
+- Sé extremadamente detallado: iluminación, lente, movimiento de cámara, hora del día,
+  textura, grain, color grade, estado de ánimo, profundidad de campo
+- Para videos: especifica SIEMPRE el movimiento de cámara
+  (slow push-in, crane shot, handheld, dolly, pan, arc, etc.)
+- Usa lenguaje cinematográfico profesional:
+  "anamorphic lens flare", "volumetric light", "golden hour", "film grain",
+  "bokeh", "rack focus", "shallow depth of field", "35mm film"
+- El prompt de movimiento DoP debe describir cómo SE MUEVE la escena, no qué hay en ella
 
-Always explain your creative choices briefly after completing the work."""
+CALIDAD: Siempre usa dop-preview (plan Unlimited del usuario).
 
+Después de generar, explica brevemente tus decisiones creativas."""
+
+
+# ---------------------------------------------------------------------------
+# Loop principal del agente
+# ---------------------------------------------------------------------------
 
 def run(
     brief: str,
@@ -349,31 +291,33 @@ def run(
     verbose: bool = True,
 ) -> list[dict]:
     """
-    Run the MaestrIA agent on a brief.
+    Ejecuta el agente MaestrIA sobre un brief.
 
     Args:
-        brief: High-level description of what to create (any language).
-        reference_image: Optional path to a local image file.
-        verbose: Print progress to console.
+        brief: Descripción de alto nivel (cualquier idioma).
+        reference_image: Ruta local a una imagen de referencia (opcional).
+        verbose: Mostrar progreso en consola.
 
     Returns:
-        List of result dicts with 'local_path' and 'url' for each generated file.
+        Lista de dicts con 'local_path' y 'url' por cada archivo generado.
     """
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
-    # Build initial user message
     user_content = brief
     if reference_image:
-        user_content += f"\n\nReference image provided at path: {reference_image}"
+        user_content += f"\n\nImagen de referencia en: {reference_image}"
 
     messages = [{"role": "user", "content": user_content}]
 
     if verbose:
-        console.print(Panel(f"[bold]Brief:[/bold] {brief}", title="MaestrIA Agent", style="blue"))
+        console.print(Panel(
+            f"[bold]Brief:[/bold] {brief}",
+            title="[bold blue]MaestrIA[/bold blue]",
+            style="blue",
+        ))
 
     results = []
 
-    # Agentic loop
     while True:
         response = client.messages.create(
             model="claude-sonnet-4-6",
@@ -383,7 +327,6 @@ def run(
             messages=messages,
         )
 
-        # Collect tool calls and text
         tool_calls = []
         text_parts = []
 
@@ -393,26 +336,21 @@ def run(
             elif block.type == "tool_use":
                 tool_calls.append(block)
 
-        # Print any text Claude produced
         if text_parts and verbose:
             console.print(Markdown("\n".join(text_parts)))
 
-        # If no tool calls, we're done
         if response.stop_reason == "end_turn" or not tool_calls:
             break
 
-        # Append Claude's response to messages
         messages.append({"role": "assistant", "content": response.content})
 
-        # Execute each tool call
         tool_results = []
         for tc in tool_calls:
             if verbose:
-                console.print(f"\n[bold cyan]→ Tool:[/bold cyan] {tc.name}")
+                console.print(f"\n[bold cyan]→ {tc.name}[/bold cyan]")
 
             result = execute_tool(tc.name, tc.input)
 
-            # Collect any file outputs
             if "local_path" in result:
                 results.append(result)
 
@@ -427,7 +365,7 @@ def run(
     if verbose and results:
         console.print(Panel(
             "\n".join(f"[green]✓[/green] {r['local_path']}" for r in results),
-            title="Generated Files",
+            title="Archivos generados",
             style="green",
         ))
 
