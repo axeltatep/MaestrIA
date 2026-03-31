@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Higgsfield — MaestrIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: #8a6e2f;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card-bg: #141414;
+    --text: #f0ece4;
+    --muted: #888;
+  }
+
+  body {
+    background: var(--black);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 60px 20px 80px;
+    background-image: radial-gradient(ellipse at 50% 0%, #1a1508 0%, #0a0a0a 70%);
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .header h1 span { color: var(--gold); font-weight: 600; }
+
+  .header p {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    line-height: 1.8;
+  }
+
+  .header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 24px auto 0;
+    opacity: 0.5;
+  }
+
+  /* ── INTRO CARD ── */
+  .intro-card {
+    background: var(--card-bg);
+    border: 1px solid #222;
+    border-left: 3px solid var(--gold-dim);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .intro-card p {
+    font-size: 13px;
+    color: #bbb;
+    line-height: 1.9;
+  }
+
+  .intro-card strong { color: var(--gold-light); font-weight: 600; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .section:nth-child(2)  { animation-delay: 0.15s; }
+  .section:nth-child(3)  { animation-delay: 0.25s; }
+  .section:nth-child(4)  { animation-delay: 0.35s; }
+  .section:nth-child(5)  { animation-delay: 0.45s; }
+  .section:nth-child(6)  { animation-delay: 0.55s; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .section-number {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .step {
+    background: var(--card-bg);
+    border: 1px solid #1e1e1e;
+    padding: 20px 24px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    transition: border-color 0.25s;
+  }
+
+  .step:hover { border-color: var(--gold-dim); }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold-dim);
+    line-height: 1;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .step-content h3 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+
+  .step-content p {
+    font-size: 12px;
+    color: #aaa;
+    line-height: 1.8;
+  }
+
+  .step-content p a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+
+  .step-content p a:hover { color: var(--gold-light); }
+
+  /* ── MODELS GRID ── */
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  .model-card {
+    background: var(--card-bg);
+    border: 1px solid #1e1e1e;
+    padding: 22px 20px;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .model-card:hover {
+    border-color: var(--gold-dim);
+    transform: translateY(-3px);
+  }
+
+  .model-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+
+  .model-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+  }
+
+  .model-desc {
+    font-size: 11px;
+    color: #999;
+    line-height: 1.7;
+  }
+
+  /* ── TIPS ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .tip-card {
+    background: var(--card-bg);
+    border: 1px solid #1e1e1e;
+    border-top: 2px solid var(--gold-dim);
+    padding: 20px 18px;
+  }
+
+  .tip-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .tip-text {
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  /* ── PROMPT BOX ── */
+  .prompt-box {
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    padding: 20px 24px;
+    margin-top: 14px;
+  }
+
+  .prompt-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+  }
+
+  .prompt-text {
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .prompt-text em {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ── WORKFLOW ── */
+  .workflow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .workflow-step {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 20px 12px;
+    background: var(--card-bg);
+    border: 1px solid #1e1e1e;
+    position: relative;
+  }
+
+  .workflow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-dim);
+    font-size: 16px;
+    z-index: 1;
+  }
+
+  .workflow-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .workflow-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .workflow-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── CTA FINAL ── */
+  .cta-section {
+    text-align: center;
+    margin-top: 64px;
+    padding: 48px 32px;
+    background: var(--card-bg);
+    border: 1px solid var(--gold-dim);
+    animation: fadeUp 0.8s ease 0.7s both;
+  }
+
+  .cta-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .cta-section h2 span { color: var(--gold); font-weight: 600; }
+
+  .cta-section p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 13px 28px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #000;
+    border: 1px solid var(--gold);
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid #333;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  /* ── FOOTER ── */
+  .footer-note {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 1.5px;
+  }
+
+  .footer-note span { color: var(--gold-dim); }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 48px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid #333;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .back-link:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .workflow-step:not(:last-child)::after { display: none; }
+    .workflow { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a class="back-link" href="index.html">← Volver a MaestrIA</a>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-label">MaestrIA — Guía de Herramientas</div>
+    <h1>Cómo usar <span>Higgsfield AI</span></h1>
+    <p>Genera videos cinematográficos con inteligencia artificial · Paso a paso</p>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <p>
+      <strong>Higgsfield</strong> es la plataforma de generación de video IA más completa del mercado.
+      Reúne los mejores modelos del mundo (Kling, Veo, Sora, WAN) en un solo lugar,
+      con herramientas diseñadas para crear contenido <strong>cinematográfico de alto impacto</strong>
+      sin necesidad de cámara ni equipo de producción. Esta guía te lleva de cero a tu primer video en minutos.
+    </p>
+  </div>
+
+  <!-- PASO 1: CUENTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <div class="section-title">Crear tu cuenta</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Ingresa a Higgsfield</h3>
+          <p>
+            Ve a <a href="https://higgsfield.ai" target="_blank" rel="noopener">higgsfield.ai</a>
+            y haz clic en <strong>Sign Up</strong>. Puedes registrarte con tu cuenta de Google
+            para acceso instantáneo — no se necesita tarjeta de crédito para comenzar.
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Elige tu plan</h3>
+          <p>
+            El plan gratuito otorga generaciones de prueba. Para uso profesional (packs MaestrIA),
+            se recomienda el plan <strong>Creative</strong> o <strong>Ultimate</strong>,
+            que permiten generaciones ilimitadas en alta calidad y acceso a todos los modelos.
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Entra al workspace</h3>
+          <p>
+            Una vez dentro, verás el dashboard principal con los botones
+            <strong>Video</strong>, <strong>Image</strong> y <strong>Character</strong>.
+            Todo el contenido MaestrIA se genera desde el workspace de <strong>Video</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2: PRIMER VIDEO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <div class="section-title">Generar tu primer video</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Haz clic en "Create a Video"</h3>
+          <p>
+            Desde el dashboard, selecciona <strong>Video → Create a Video</strong>.
+            Verás la pantalla de generación con el selector de modo y modelo en la parte superior.
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Selecciona el modo de entrada</h3>
+          <p>
+            Elige cómo quieres iniciar la generación:
+            <strong>Text-to-Video</strong> (desde un prompt de texto),
+            <strong>Image-to-Video</strong> (anima una imagen existente),
+            o <strong>Character</strong> (usa un personaje IA de tu marca).
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Escribe tu prompt y genera</h3>
+          <p>
+            Describe la escena con detalle. Incluye ambiente, iluminación, movimiento de cámara
+            y estilo visual. Haz clic en <strong>Generate</strong> y en 30–90 segundos
+            tendrás tu video listo para previsualizar.
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Descarga en alta calidad</h3>
+          <p>
+            Una vez satisfecho con el resultado, haz clic en <strong>Download</strong>.
+            Selecciona formato MP4 y resolución 1080p o 4K según el uso final.
+            Los videos se guardan directamente en tu dispositivo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 3: MODELOS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <div class="section-title">Modelos disponibles</div>
+    </div>
+    <div class="models-grid">
+      <div class="model-card">
+        <div class="model-name">WAN 2.6</div>
+        <div class="model-tag">Cinematográfico · Multi-escena</div>
+        <div class="model-desc">
+          Ideal para continuidad narrativa y cobertura de múltiples planos.
+          El modelo más recomendado para contenido MaestrIA con calidad de producción.
+        </div>
+      </div>
+      <div class="model-card">
+        <div class="model-name">Kling 2.6</div>
+        <div class="model-tag">Personajes · Lip-sync</div>
+        <div class="model-desc">
+          Especializado en personajes con diálogo, sincronización labial y
+          expresiones faciales naturales. Perfecto para voceros de marca.
+        </div>
+      </div>
+      <div class="model-card">
+        <div class="model-name">Minimax Hailuo</div>
+        <div class="model-tag">Velocidad · Iteración rápida</div>
+        <div class="model-desc">
+          El más rápido del ecosistema. Ideal cuando necesitas generar muchas
+          variaciones en poco tiempo para elegir la mejor versión.
+        </div>
+      </div>
+      <div class="model-card">
+        <div class="model-name">Veo 3.1</div>
+        <div class="model-tag">Google · Ultra realismo</div>
+        <div class="model-desc">
+          El modelo de Google con máxima fidelidad fotorrealista.
+          Genera videos con físicas naturales y texturas de alta definición.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 4: PROMPTS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <div class="section-title">Cómo escribir prompts efectivos</div>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-label">Iluminación</div>
+        <div class="tip-text">
+          Especifica el tipo de luz: golden hour, luz de estudio suave,
+          neon nocturno, luz de vela. La iluminación define el 70% del look cinematográfico.
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-label">Cámara</div>
+        <div class="tip-text">
+          Indica el movimiento: slow motion, dolly in, aerial drone shot,
+          handheld shaky, static wide shot. El lenguaje de cine funciona perfectamente.
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-label">Estilo Visual</div>
+        <div class="tip-text">
+          Añade referencias de estilo: "shot on 35mm film", "cinematic color grading",
+          "hyperrealistic 8K", "dark moody aesthetic". Esto afina el resultado dramáticamente.
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-label">Sujeto</div>
+        <div class="tip-text">
+          Describe el sujeto con detalle: ropa, actitud, posición, acción.
+          Entre más específico seas, más control tendrás sobre el resultado final.
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-label">Ejemplo de prompt cinematográfico</div>
+      <div class="prompt-text">
+        <em>Slow motion close-up</em> of a luxury perfume bottle on a black marble surface,
+        <em>golden hour backlight</em> creating lens flare, water droplets falling in slow motion,
+        <em>35mm film grain</em>, dark moody atmosphere, cinematic color grading,
+        <em>dolly push-in</em>, shallow depth of field, 4K ultra sharp.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 5: FLUJO MAESTRIA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <div class="section-title">Flujo de trabajo MaestrIA</div>
+    </div>
+    <div class="workflow">
+      <div class="workflow-step">
+        <div class="workflow-icon">🎯</div>
+        <div class="workflow-title">Brief</div>
+        <div class="workflow-desc">Definir objetivo y estética de la marca</div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-icon">✍️</div>
+        <div class="workflow-title">Prompts</div>
+        <div class="workflow-desc">Redactar prompts cinematográficos detallados</div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-icon">🎬</div>
+        <div class="workflow-title">Generación</div>
+        <div class="workflow-desc">Crear videos en Higgsfield con el modelo adecuado</div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-icon">✂️</div>
+        <div class="workflow-title">Edición</div>
+        <div class="workflow-desc">Seleccionar los mejores clips y editar reels</div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-icon">🚀</div>
+        <div class="workflow-title">Entrega</div>
+        <div class="workflow-desc">Drive organizado + captions listos para publicar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="cta-section">
+    <h2>¿Listo para crear contenido <span>cinematográfico</span>?</h2>
+    <p>
+      Con Higgsfield + MaestrIA transformas cualquier marca en una experiencia visual de alto impacto.<br>
+      Comienza hoy — el primer video lo hacemos juntos.
+    </p>
+    <div class="cta-buttons">
+      <a class="btn btn-primary" href="https://higgsfield.ai" target="_blank" rel="noopener">
+        Abrir Higgsfield
+      </a>
+      <a class="btn btn-secondary" href="https://wa.me/524775342897?text=Hola%2C%20quiero%20comenzar%20con%20MaestrIA" target="_blank" rel="noopener">
+        Contactar a MaestrIA
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    MaestrIA — Contenido Visual con IA · <span>Guía Higgsfield</span> · 2026
+  </div>
+
+</div>
+</body>
+</html>
