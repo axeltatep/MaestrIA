@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guía Higgsfield — MaestrIA</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Claude Code + Higgsfield — Setup Guide · MaestrIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,6 +15,7 @@
     --black: #0a0a0a;
     --dark: #111111;
     --card-bg: #141414;
+    --code-bg: #0d0d0d;
     --text: #f0ece4;
     --muted: #888;
   }
@@ -24,401 +25,13 @@
     font-family: 'Montserrat', sans-serif;
     color: var(--text);
     min-height: 100vh;
-    padding: 60px 20px 80px;
+    padding: 60px 20px 100px;
     background-image: radial-gradient(ellipse at 50% 0%, #1a1508 0%, #0a0a0a 70%);
   }
 
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-  }
+  .container { max-width: 800px; margin: 0 auto; }
 
-  /* ── HEADER ── */
-  .header {
-    text-align: center;
-    margin-bottom: 64px;
-    animation: fadeDown 0.8s ease both;
-  }
-
-  .header-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 14px;
-  }
-
-  .header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(32px, 6vw, 56px);
-    font-weight: 300;
-    letter-spacing: 2px;
-    color: var(--text);
-    line-height: 1.1;
-  }
-
-  .header h1 span { color: var(--gold); font-weight: 600; }
-
-  .header p {
-    margin-top: 14px;
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 1.5px;
-    line-height: 1.8;
-  }
-
-  .header::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 1px;
-    background: var(--gold);
-    margin: 24px auto 0;
-    opacity: 0.5;
-  }
-
-  /* ── INTRO CARD ── */
-  .intro-card {
-    background: var(--card-bg);
-    border: 1px solid #222;
-    border-left: 3px solid var(--gold-dim);
-    padding: 28px 32px;
-    margin-bottom: 48px;
-    animation: fadeUp 0.8s ease 0.1s both;
-  }
-
-  .intro-card p {
-    font-size: 13px;
-    color: #bbb;
-    line-height: 1.9;
-  }
-
-  .intro-card strong { color: var(--gold-light); font-weight: 600; }
-
-  /* ── SECTION ── */
-  .section {
-    margin-bottom: 48px;
-    animation: fadeUp 0.8s ease both;
-  }
-
-  .section:nth-child(2)  { animation-delay: 0.15s; }
-  .section:nth-child(3)  { animation-delay: 0.25s; }
-  .section:nth-child(4)  { animation-delay: 0.35s; }
-  .section:nth-child(5)  { animation-delay: 0.45s; }
-  .section:nth-child(6)  { animation-delay: 0.55s; }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-
-  .section-number {
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--gold-dim);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 1px;
-    flex-shrink: 0;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: 1px;
-  }
-
-  /* ── STEPS ── */
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .step {
-    background: var(--card-bg);
-    border: 1px solid #1e1e1e;
-    padding: 20px 24px;
-    display: flex;
-    gap: 18px;
-    align-items: flex-start;
-    transition: border-color 0.25s;
-  }
-
-  .step:hover { border-color: var(--gold-dim); }
-
-  .step-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gold-dim);
-    line-height: 1;
-    min-width: 28px;
-    text-align: center;
-  }
-
-  .step-content h3 {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 6px;
-  }
-
-  .step-content p {
-    font-size: 12px;
-    color: #aaa;
-    line-height: 1.8;
-  }
-
-  .step-content p a {
-    color: var(--gold);
-    text-decoration: none;
-    border-bottom: 1px solid var(--gold-dim);
-  }
-
-  .step-content p a:hover { color: var(--gold-light); }
-
-  /* ── MODELS GRID ── */
-  .models-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-  }
-
-  .model-card {
-    background: var(--card-bg);
-    border: 1px solid #1e1e1e;
-    padding: 22px 20px;
-    transition: border-color 0.25s, transform 0.25s;
-  }
-
-  .model-card:hover {
-    border-color: var(--gold-dim);
-    transform: translateY(-3px);
-  }
-
-  .model-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--gold-light);
-    margin-bottom: 6px;
-  }
-
-  .model-tag {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 10px;
-  }
-
-  .model-desc {
-    font-size: 11px;
-    color: #999;
-    line-height: 1.7;
-  }
-
-  /* ── TIPS ── */
-  .tips-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-  }
-
-  .tip-card {
-    background: var(--card-bg);
-    border: 1px solid #1e1e1e;
-    border-top: 2px solid var(--gold-dim);
-    padding: 20px 18px;
-  }
-
-  .tip-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-
-  .tip-text {
-    font-size: 11px;
-    color: #aaa;
-    line-height: 1.7;
-  }
-
-  /* ── PROMPT BOX ── */
-  .prompt-box {
-    background: #0f0f0f;
-    border: 1px solid #2a2a2a;
-    padding: 20px 24px;
-    margin-top: 14px;
-  }
-
-  .prompt-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 10px;
-  }
-
-  .prompt-text {
-    font-size: 12px;
-    color: #ccc;
-    line-height: 1.8;
-    font-style: italic;
-  }
-
-  .prompt-text em {
-    color: var(--gold);
-    font-style: normal;
-    font-weight: 600;
-  }
-
-  /* ── WORKFLOW ── */
-  .workflow {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    flex-wrap: wrap;
-  }
-
-  .workflow-step {
-    flex: 1;
-    min-width: 140px;
-    text-align: center;
-    padding: 20px 12px;
-    background: var(--card-bg);
-    border: 1px solid #1e1e1e;
-    position: relative;
-  }
-
-  .workflow-step:not(:last-child)::after {
-    content: '→';
-    position: absolute;
-    right: -13px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gold-dim);
-    font-size: 16px;
-    z-index: 1;
-  }
-
-  .workflow-icon {
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-
-  .workflow-title {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-
-  .workflow-desc {
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  /* ── CTA FINAL ── */
-  .cta-section {
-    text-align: center;
-    margin-top: 64px;
-    padding: 48px 32px;
-    background: var(--card-bg);
-    border: 1px solid var(--gold-dim);
-    animation: fadeUp 0.8s ease 0.7s both;
-  }
-
-  .cta-section h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(24px, 4vw, 36px);
-    font-weight: 300;
-    color: var(--text);
-    margin-bottom: 12px;
-  }
-
-  .cta-section h2 span { color: var(--gold); font-weight: 600; }
-
-  .cta-section p {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 28px;
-    letter-spacing: 1px;
-    line-height: 1.8;
-  }
-
-  .cta-buttons {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 13px 28px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: all 0.25s ease;
-    cursor: pointer;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    color: #000;
-    border: 1px solid var(--gold);
-  }
-
-  .btn-primary:hover {
-    background: var(--gold-light);
-    border-color: var(--gold-light);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid #333;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--gold-dim);
-    color: var(--gold);
-  }
-
-  /* ── FOOTER ── */
-  .footer-note {
-    margin-top: 48px;
-    text-align: center;
-    font-size: 10px;
-    color: #444;
-    letter-spacing: 1.5px;
-  }
-
-  .footer-note span { color: var(--gold-dim); }
-
+  /* ── BACK ── */
   .back-link {
     display: inline-block;
     margin-bottom: 48px;
@@ -429,293 +42,708 @@
     color: var(--muted);
     text-decoration: none;
     border-bottom: 1px solid #333;
-    transition: color 0.2s, border-color 0.2s;
+    transition: color .2s, border-color .2s;
+  }
+  .back-link:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeDown .8s ease both;
+  }
+  .header-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5.5vw, 52px);
+    font-weight: 300; letter-spacing: 2px; color: var(--text); line-height: 1.15;
+  }
+  .header h1 span { color: var(--gold); font-weight: 600; }
+  .header p {
+    margin-top: 14px; font-size: 12px; color: var(--muted);
+    letter-spacing: 1.5px; line-height: 1.9;
+  }
+  .header::after {
+    content: ''; display: block; width: 60px; height: 1px;
+    background: var(--gold); margin: 24px auto 0; opacity: .5;
   }
 
-  .back-link:hover { color: var(--gold); border-color: var(--gold-dim); }
+  /* ── OVERVIEW CARD ── */
+  .overview {
+    background: var(--card-bg);
+    border: 1px solid #222;
+    border-left: 3px solid var(--gold-dim);
+    padding: 28px 32px;
+    margin-bottom: 56px;
+    animation: fadeUp .8s ease .1s both;
+  }
+  .overview p { font-size: 13px; color: #bbb; line-height: 1.9; }
+  .overview strong { color: var(--gold-light); font-weight: 600; }
+
+  /* ── COMPARISON ── */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 56px;
+    animation: fadeUp .8s ease .2s both;
+  }
+  @media(max-width:560px){ .comparison { grid-template-columns: 1fr; } }
+
+  .compare-card {
+    background: var(--card-bg);
+    border: 1px solid #1e1e1e;
+    padding: 24px 22px;
+  }
+  .compare-card.bad { border-top: 2px solid #444; }
+  .compare-card.good { border-top: 2px solid var(--gold-dim); }
+
+  .compare-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .compare-card.bad  .compare-label { color: #666; }
+  .compare-card.good .compare-label { color: var(--gold); }
+
+  .compare-list {
+    list-style: none; display: flex; flex-direction: column; gap: 8px;
+  }
+  .compare-list li {
+    font-size: 12px; color: #aaa; line-height: 1.6;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .compare-list li::before {
+    content: '—'; color: #444; flex-shrink: 0; margin-top: 1px;
+  }
+  .compare-card.good .compare-list li::before { content: '✓'; color: var(--gold-dim); }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 52px; animation: fadeUp .8s ease both; }
+  .section:nth-child(3)  { animation-delay: .15s; }
+  .section:nth-child(4)  { animation-delay: .2s; }
+  .section:nth-child(5)  { animation-delay: .25s; }
+  .section:nth-child(6)  { animation-delay: .3s; }
+  .section:nth-child(7)  { animation-delay: .35s; }
+  .section:nth-child(8)  { animation-delay: .4s; }
+  .section:nth-child(9)  { animation-delay: .45s; }
+  .section:nth-child(10) { animation-delay: .5s; }
+
+  .section-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+  }
+  .section-number {
+    width: 34px; height: 34px; border: 1px solid var(--gold-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--gold);
+    letter-spacing: 1px; flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; color: var(--text); letter-spacing: 1px;
+  }
+
+  /* ── REQUIREMENTS ── */
+  .req-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+    gap: 10px;
+  }
+  .req-item {
+    background: var(--card-bg); border: 1px solid #1e1e1e;
+    padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .req-dot {
+    width: 6px; height: 6px; background: var(--gold-dim);
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .req-text { font-size: 12px; color: #bbb; font-weight: 500; }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+
+  .step {
+    background: var(--card-bg); border: 1px solid #1e1e1e;
+    padding: 22px 24px; display: flex; gap: 20px; align-items: flex-start;
+    transition: border-color .25s;
+  }
+  .step:hover { border-color: var(--gold-dim); }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px; font-weight: 700; color: var(--gold-dim);
+    line-height: 1; min-width: 28px; text-align: center;
+  }
+  .step-body h3 {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold-light); margin-bottom: 8px;
+  }
+  .step-body p {
+    font-size: 12px; color: #aaa; line-height: 1.8; margin-bottom: 10px;
+  }
+  .step-body p:last-child { margin-bottom: 0; }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: var(--code-bg); border: 1px solid #222;
+    padding: 14px 18px; margin-top: 10px;
+    overflow-x: auto;
+  }
+  .code-block code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--gold-light);
+    white-space: pre; display: block; line-height: 1.7;
+  }
+  .code-block.comment code { color: #888; }
+
+  /* ── CLAUDE.MD BOX ── */
+  .claudemd-box {
+    background: var(--code-bg);
+    border: 1px solid var(--gold-dim);
+    padding: 0;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .claudemd-header {
+    background: #111;
+    border-bottom: 1px solid #222;
+    padding: 8px 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .claudemd-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--gold); font-weight: 500;
+  }
+  .claudemd-body {
+    padding: 16px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: #aaa; line-height: 1.8;
+    white-space: pre;
+  }
+  .claudemd-body .comment { color: #555; }
+  .claudemd-body .key    { color: var(--gold-light); }
+  .claudemd-body .value  { color: #ccc; }
+
+  /* ── VERIFY BLOCK ── */
+  .verify-block {
+    background: var(--card-bg); border: 1px solid #1e1e1e;
+    padding: 16px 20px; margin-top: 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .verify-indicator {
+    width: 8px; height: 8px; background: var(--gold);
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .verify-text { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #bbb; }
+
+  /* ── WORKFLOWS GRID ── */
+  .workflows-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 12px;
+  }
+  .wf-card {
+    background: var(--card-bg); border: 1px solid #1e1e1e;
+    border-top: 2px solid var(--gold-dim); padding: 20px 18px;
+  }
+  .wf-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .wf-text { font-size: 12px; color: #aaa; line-height: 1.7; }
+
+  /* ── ISSUES ── */
+  .issues { display: flex; flex-direction: column; gap: 12px; }
+  .issue {
+    background: var(--card-bg); border: 1px solid #1e1e1e;
+    padding: 18px 22px;
+  }
+  .issue-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #bbb; margin-bottom: 10px;
+  }
+  .issue-body { font-size: 12px; color: #888; line-height: 1.8; }
+
+  /* ── QUICK START ── */
+  .quickstart {
+    background: var(--card-bg); border: 1px solid var(--gold-dim);
+    padding: 32px 28px;
+  }
+  .quickstart ol {
+    list-style: none; display: flex; flex-direction: column; gap: 12px;
+    counter-reset: qs;
+  }
+  .quickstart ol li {
+    counter-increment: qs;
+    display: flex; align-items: center; gap: 16px;
+    font-size: 12px; color: #bbb;
+  }
+  .quickstart ol li::before {
+    content: counter(qs);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 700; color: var(--gold-dim);
+    min-width: 20px; text-align: center;
+  }
+
+  /* ── KEY IDEA ── */
+  .key-idea {
+    text-align: center;
+    padding: 48px 32px;
+    background: var(--card-bg);
+    border: 1px solid #1e1e1e;
+    margin-top: 14px;
+  }
+  .key-idea h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px,4vw,34px);
+    font-weight: 300; color: var(--text); margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .key-idea h2 span { color: var(--gold); font-weight: 600; }
+
+  .flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; flex-wrap: wrap; margin-top: 20px;
+  }
+  .flow-step {
+    background: #0f0f0f; border: 1px solid #222;
+    padding: 10px 18px; font-size: 11px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase; color: #bbb;
+  }
+  .flow-arrow { color: var(--gold-dim); font-size: 14px; }
+  .flow-step.highlight { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center; margin-top: 56px; padding: 40px 28px;
+    background: var(--card-bg); border: 1px solid var(--gold-dim);
+    animation: fadeUp .8s ease .7s both;
+  }
+  .cta-section p { font-size: 12px; color: var(--muted); margin-bottom: 24px; line-height: 1.8; }
+  .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 12px 26px;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none; transition: all .25s;
+  }
+  .btn-primary { background: var(--gold); color: #000; border: 1px solid var(--gold); }
+  .btn-primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
+  .btn-secondary { background: transparent; color: var(--muted); border: 1px solid #333; }
+  .btn-secondary:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* ── FOOTER ── */
+  .footer-note {
+    margin-top: 48px; text-align: center;
+    font-size: 10px; color: #444; letter-spacing: 1.5px;
+  }
+  .footer-note span { color: var(--gold-dim); }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(-20px); }
+    to   { opacity:1; transform:translateY(0); }
   }
-
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    .workflow-step:not(:last-child)::after { display: none; }
-    .workflow { flex-direction: column; }
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
   }
 </style>
 </head>
 <body>
-
 <div class="container">
 
   <a class="back-link" href="index.html">← Volver a MaestrIA</a>
 
   <!-- HEADER -->
   <div class="header">
-    <div class="header-label">MaestrIA — Guía de Herramientas</div>
-    <h1>Cómo usar <span>Higgsfield AI</span></h1>
-    <p>Genera videos cinematográficos con inteligencia artificial · Paso a paso</p>
+    <div class="header-label">MaestrIA — Guía Técnica</div>
+    <h1>Claude Code <span>+ Higgsfield</span><br>Setup Guide</h1>
+    <p>Automatiza tu producción de contenido IA · De idea a video sin cambiar de ventana</p>
   </div>
 
-  <!-- INTRO -->
-  <div class="intro-card">
+  <!-- OVERVIEW -->
+  <div class="overview">
     <p>
-      <strong>Higgsfield</strong> es la plataforma de generación de video IA más completa del mercado.
-      Reúne los mejores modelos del mundo (Kling, Veo, Sora, WAN) en un solo lugar,
-      con herramientas diseñadas para crear contenido <strong>cinematográfico de alto impacto</strong>
-      sin necesidad de cámara ni equipo de producción. Esta guía te lleva de cero a tu primer video en minutos.
+      Normalmente crear contenido IA requiere alternar entre múltiples herramientas:
+      escribir prompts, generar imágenes, generar videos, editar outputs, gestionar archivos.
+      <strong>Claude Code cambia esto.</strong> Con un solo archivo — <strong>CLAUDE.md</strong> —
+      defines cómo trabajas, y Claude opera Higgsfield automáticamente por ti.
     </p>
   </div>
 
-  <!-- PASO 1: CUENTA -->
+  <!-- COMPARISON -->
+  <div class="comparison">
+    <div class="compare-card bad">
+      <div class="compare-label">Sin Claude Code</div>
+      <ul class="compare-list">
+        <li>Copy-paste entre pestañas</li>
+        <li>Repetir configuraciones cada vez</li>
+        <li>Inconsistencia entre sesiones</li>
+        <li>Workflow manual y lento</li>
+      </ul>
+    </div>
+    <div class="compare-card good">
+      <div class="compare-label">Con Claude Code</div>
+      <ul class="compare-list">
+        <li>Genera prompts automáticamente</li>
+        <li>Controla Higgsfield directamente</li>
+        <li>Organiza assets en carpetas</li>
+        <li>Sigue tus reglas de producción</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 1: REQUIREMENTS -->
   <div class="section">
     <div class="section-header">
       <div class="section-number">01</div>
-      <div class="section-title">Crear tu cuenta</div>
+      <div class="section-title">Requisitos</div>
     </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>Ingresa a Higgsfield</h3>
-          <p>
-            Ve a <a href="https://higgsfield.ai" target="_blank" rel="noopener">higgsfield.ai</a>
-            y haz clic en <strong>Sign Up</strong>. Puedes registrarte con tu cuenta de Google
-            para acceso instantáneo — no se necesita tarjeta de crédito para comenzar.
-          </p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Elige tu plan</h3>
-          <p>
-            El plan gratuito otorga generaciones de prueba. Para uso profesional (packs MaestrIA),
-            se recomienda el plan <strong>Creative</strong> o <strong>Ultimate</strong>,
-            que permiten generaciones ilimitadas en alta calidad y acceso a todos los modelos.
-          </p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Entra al workspace</h3>
-          <p>
-            Una vez dentro, verás el dashboard principal con los botones
-            <strong>Video</strong>, <strong>Image</strong> y <strong>Character</strong>.
-            Todo el contenido MaestrIA se genera desde el workspace de <strong>Video</strong>.
-          </p>
-        </div>
-      </div>
+    <div class="req-grid">
+      <div class="req-item"><div class="req-dot"></div><span class="req-text">Cursor o VS Code</span></div>
+      <div class="req-item"><div class="req-dot"></div><span class="req-text">Node.js</span></div>
+      <div class="req-item"><div class="req-dot"></div><span class="req-text">Claude Code CLI</span></div>
+      <div class="req-item"><div class="req-dot"></div><span class="req-text">Cuenta Higgsfield</span></div>
+      <div class="req-item"><div class="req-dot"></div><span class="req-text">Chrome instalado</span></div>
+      <div class="req-item"><div class="req-dot"></div><span class="req-text">Playwright MCP</span></div>
     </div>
   </div>
 
-  <!-- PASO 2: PRIMER VIDEO -->
+  <!-- SECTION 2: SETUP -->
   <div class="section">
     <div class="section-header">
       <div class="section-number">02</div>
-      <div class="section-title">Generar tu primer video</div>
+      <div class="section-title">Setup en 5 pasos</div>
     </div>
     <div class="steps">
+
+      <!-- STEP 1 -->
       <div class="step">
         <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>Haz clic en "Create a Video"</h3>
-          <p>
-            Desde el dashboard, selecciona <strong>Video → Create a Video</strong>.
-            Verás la pantalla de generación con el selector de modo y modelo en la parte superior.
-          </p>
+        <div class="step-body">
+          <h3>Instalar Claude Code</h3>
+          <p>Abre la terminal y ejecuta:</p>
+          <div class="code-block"><code>npm install -g @anthropic-ai/claude-code</code></div>
+          <p style="margin-top:10px">Luego inicia Claude:</p>
+          <div class="code-block"><code>claude</code></div>
+          <p style="margin-top:10px; color:#666; font-size:11px;">Claude ya está corriendo.</p>
         </div>
       </div>
+
+      <!-- STEP 2 -->
       <div class="step">
         <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Selecciona el modo de entrada</h3>
+        <div class="step-body">
+          <h3>Crear tu CLAUDE.md</h3>
           <p>
-            Elige cómo quieres iniciar la generación:
-            <strong>Text-to-Video</strong> (desde un prompt de texto),
-            <strong>Image-to-Video</strong> (anima una imagen existente),
-            o <strong>Character</strong> (usa un personaje IA de tu marca).
+            Este archivo le enseña a Claude cómo trabajas.
+            Claude lo lee automáticamente al inicio de cada sesión.
+            Crea el archivo en la raíz de tu proyecto:
           </p>
+          <div class="claudemd-box">
+            <div class="claudemd-header">
+              <span class="claudemd-filename">CLAUDE.md</span>
+            </div>
+            <div class="claudemd-body"><span class="comment"># Mi Workflow</span>
+
+<span class="key">## Herramientas</span>
+
+<span class="value">Imágenes:    Higgsfield NanoBanana Pro
+Videos:      Higgsfield Cinema Studio</span>
+
+<span class="key">## Configuración base</span>
+
+<span class="value">Aspect ratio: 16:9
+Imágenes:     8 por prompt
+Resolución:   2K unlimited ON</span>
+
+<span class="key">## Reglas</span>
+
+<span class="value">- Mostrar prompts antes de generar
+- Esperar confirmación del usuario
+- Guardar en /output</span></div>
+          </div>
+          <p style="margin-top:10px; font-size:11px; color:#666;">Puedes personalizar esto como quieras.</p>
         </div>
       </div>
+
+      <!-- STEP 3 -->
       <div class="step">
         <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Escribe tu prompt y genera</h3>
+        <div class="step-body">
+          <h3>Instalar Playwright MCP <span style="color:#C9A84C;font-size:10px;letter-spacing:1px;">(IMPORTANTE)</span></h3>
           <p>
-            Describe la escena con detalle. Incluye ambiente, iluminación, movimiento de cámara
-            y estilo visual. Haz clic en <strong>Generate</strong> y en 30–90 segundos
-            tendrás tu video listo para previsualizar.
+            Este paso habilita el control del navegador.
+            Sin esto, Claude no puede abrir Higgsfield.
           </p>
+          <div class="code-block"><code>claude mcp add playwright npx '@playwright/mcp@latest'</code></div>
+          <p style="margin-top:12px">Reinicia Claude:</p>
+          <div class="code-block"><code>exit
+claude</code></div>
+          <p style="margin-top:12px">Verifica:</p>
+          <div class="code-block"><code>/mcp</code></div>
+          <p style="margin-top:10px">Deberías ver:</p>
+          <div class="verify-block">
+            <div class="verify-indicator"></div>
+            <span class="verify-text">playwright</span>
+          </div>
+          <p style="margin-top:10px; font-size:11px; color:#666;">Ahora Claude puede controlar un navegador.</p>
         </div>
       </div>
+
+      <!-- STEP 4 -->
       <div class="step">
         <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>Descarga en alta calidad</h3>
-          <p>
-            Una vez satisfecho con el resultado, haz clic en <strong>Download</strong>.
-            Selecciona formato MP4 y resolución 1080p o 4K según el uso final.
-            Los videos se guardan directamente en tu dispositivo.
+        <div class="step-body">
+          <h3>Probar el control del navegador</h3>
+          <p>Prueba la navegación:</p>
+          <div class="code-block comment"><code>Use playwright to open higgsfield.ai</code></div>
+          <p style="margin-top:10px">Claude debería abrir el navegador y navegar al sitio. Inicia sesión manualmente. Luego escribe:</p>
+          <div class="code-block comment"><code>Continue</code></div>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Probar control de Higgsfield</h3>
+          <p>Prueba que Claude puede operar configuraciones:</p>
+          <div class="code-block comment"><code>Use playwright to open NanoBanana Pro.
+
+Set:
+16:9 aspect ratio
+2K unlimited ON
+extra free gens OFF
+
+Do not generate.</code></div>
+          <p style="margin-top:10px">
+            Si Claude puede cambiar los settings, <strong style="color:var(--gold-light)">tu setup funciona.</strong>
           </p>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- PASO 3: MODELOS -->
+  <!-- SECTION 3: CLAUDE + HIGGSFIELD -->
   <div class="section">
     <div class="section-header">
       <div class="section-number">03</div>
-      <div class="section-title">Modelos disponibles</div>
+      <div class="section-title">Cómo funciona Claude con Higgsfield</div>
     </div>
-    <div class="models-grid">
-      <div class="model-card">
-        <div class="model-name">WAN 2.6</div>
-        <div class="model-tag">Cinematográfico · Multi-escena</div>
-        <div class="model-desc">
-          Ideal para continuidad narrativa y cobertura de múltiples planos.
-          El modelo más recomendado para contenido MaestrIA con calidad de producción.
-        </div>
-      </div>
-      <div class="model-card">
-        <div class="model-name">Kling 2.6</div>
-        <div class="model-tag">Personajes · Lip-sync</div>
-        <div class="model-desc">
-          Especializado en personajes con diálogo, sincronización labial y
-          expresiones faciales naturales. Perfecto para voceros de marca.
-        </div>
-      </div>
-      <div class="model-card">
-        <div class="model-name">Minimax Hailuo</div>
-        <div class="model-tag">Velocidad · Iteración rápida</div>
-        <div class="model-desc">
-          El más rápido del ecosistema. Ideal cuando necesitas generar muchas
-          variaciones en poco tiempo para elegir la mejor versión.
-        </div>
-      </div>
-      <div class="model-card">
-        <div class="model-name">Veo 3.1</div>
-        <div class="model-tag">Google · Ultra realismo</div>
-        <div class="model-desc">
-          El modelo de Google con máxima fidelidad fotorrealista.
-          Genera videos con físicas naturales y texturas de alta definición.
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="font-size:18px;">→</div>
+        <div class="step-body">
+          <h3>Después del setup, Claude puede:</h3>
+          <p>
+            Abrir Higgsfield · Cambiar configuraciones · Ingresar prompts ·
+            Generar imágenes · Generar videos · Organizar outputs en carpetas.
+          </p>
+          <p>Todo controlado mediante instrucciones o tu CLAUDE.md. Ejemplo:</p>
+          <div class="code-block comment"><code>Generate 5 cinematic product images using NanoBanana Pro.
+Aspect ratio 16:9. 8 images per prompt.</code></div>
+          <p style="margin-top:10px; font-size:11px; color:#666;">
+            Claude abrirá Higgsfield → establecerá el modelo → ingresará los prompts → generará las imágenes.
+          </p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- PASO 4: PROMPTS -->
+  <!-- SECTION 4: CLAUDE.MD -->
   <div class="section">
     <div class="section-header">
       <div class="section-number">04</div>
-      <div class="section-title">Cómo escribir prompts efectivos</div>
+      <div class="section-title">El poder de CLAUDE.md</div>
     </div>
-    <div class="tips-grid">
-      <div class="tip-card">
-        <div class="tip-label">Iluminación</div>
-        <div class="tip-text">
-          Especifica el tipo de luz: golden hour, luz de estudio suave,
-          neon nocturno, luz de vela. La iluminación define el 70% del look cinematográfico.
-        </div>
+    <div class="comparison">
+      <div class="compare-card bad">
+        <div class="compare-label">Sin CLAUDE.md</div>
+        <div class="code-block comment" style="margin-top:0; border:none; padding:0; background:transparent;"><code style="font-size:11px; color:#666;">Use NanoBanana Pro
+16:9
+8 images
+dark moody style
+wait for confirmation...</code></div>
+        <p style="font-size:11px; color:#555; margin-top:10px;">→ Repites esto CADA sesión</p>
       </div>
-      <div class="tip-card">
-        <div class="tip-label">Cámara</div>
-        <div class="tip-text">
-          Indica el movimiento: slow motion, dolly in, aerial drone shot,
-          handheld shaky, static wide shot. El lenguaje de cine funciona perfectamente.
-        </div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-label">Estilo Visual</div>
-        <div class="tip-text">
-          Añade referencias de estilo: "shot on 35mm film", "cinematic color grading",
-          "hyperrealistic 8K", "dark moody aesthetic". Esto afina el resultado dramáticamente.
-        </div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-label">Sujeto</div>
-        <div class="tip-text">
-          Describe el sujeto con detalle: ropa, actitud, posición, acción.
-          Entre más específico seas, más control tendrás sobre el resultado final.
-        </div>
-      </div>
-    </div>
-
-    <div class="prompt-box">
-      <div class="prompt-label">Ejemplo de prompt cinematográfico</div>
-      <div class="prompt-text">
-        <em>Slow motion close-up</em> of a luxury perfume bottle on a black marble surface,
-        <em>golden hour backlight</em> creating lens flare, water droplets falling in slow motion,
-        <em>35mm film grain</em>, dark moody atmosphere, cinematic color grading,
-        <em>dolly push-in</em>, shallow depth of field, 4K ultra sharp.
+      <div class="compare-card good">
+        <div class="compare-label">Con CLAUDE.md</div>
+        <div class="code-block comment" style="margin-top:0; border:none; padding:0; background:transparent;"><code style="font-size:11px; color:var(--gold);">Generate product shots.</code></div>
+        <p style="font-size:11px; color:var(--gold-dim); margin-top:10px;">→ Claude sigue tus defaults automáticamente</p>
       </div>
     </div>
   </div>
 
-  <!-- PASO 5: FLUJO MAESTRIA -->
+  <!-- SECTION 5: FOLDER STRUCTURE -->
   <div class="section">
     <div class="section-header">
       <div class="section-number">05</div>
-      <div class="section-title">Flujo de trabajo MaestrIA</div>
+      <div class="section-title">Estructura de carpetas</div>
     </div>
-    <div class="workflow">
-      <div class="workflow-step">
-        <div class="workflow-icon">🎯</div>
-        <div class="workflow-title">Brief</div>
-        <div class="workflow-desc">Definir objetivo y estética de la marca</div>
+    <div class="claudemd-box">
+      <div class="claudemd-header">
+        <span class="claudemd-filename">Estructura del proyecto</span>
       </div>
-      <div class="workflow-step">
-        <div class="workflow-icon">✍️</div>
-        <div class="workflow-title">Prompts</div>
-        <div class="workflow-desc">Redactar prompts cinematográficos detallados</div>
+      <div class="claudemd-body"><span class="key">MaestrIA/</span>
+
+<span class="value">  CLAUDE.md          ← reglas, tools, workflow
+
+  reference/         ← referencias de marca, mood boards
+  images/            ← imágenes generadas
+  videos/            ← videos generados
+  output/            ← assets finales aprobados</span></div>
+    </div>
+    <p style="margin-top:12px; font-size:11px; color:#666;">Esta estructura ya está creada en el proyecto. Claude organizará archivos automáticamente.</p>
+  </div>
+
+  <!-- SECTION 6: WORKFLOWS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">06</div>
+      <div class="section-title">Workflows de ejemplo</div>
+    </div>
+    <div class="workflows-grid">
+      <div class="wf-card">
+        <div class="wf-label">Generación de imágenes</div>
+        <div class="wf-text">Genera batches automáticos con tus settings predefinidos.</div>
       </div>
-      <div class="workflow-step">
-        <div class="workflow-icon">🎬</div>
-        <div class="workflow-title">Generación</div>
-        <div class="workflow-desc">Crear videos en Higgsfield con el modelo adecuado</div>
+      <div class="wf-card">
+        <div class="wf-label">Generación de video</div>
+        <div class="wf-text">Genera shots cinematográficos desde imágenes seleccionadas.</div>
       </div>
-      <div class="workflow-step">
-        <div class="workflow-icon">✂️</div>
-        <div class="workflow-title">Edición</div>
-        <div class="workflow-desc">Seleccionar los mejores clips y editar reels</div>
+      <div class="wf-card">
+        <div class="wf-label">Iteración de prompts</div>
+        <div class="wf-text">Mejora prompts automáticamente basado en el resultado.</div>
       </div>
-      <div class="workflow-step">
-        <div class="workflow-icon">🚀</div>
-        <div class="workflow-title">Entrega</div>
-        <div class="workflow-desc">Drive organizado + captions listos para publicar</div>
+      <div class="wf-card">
+        <div class="wf-label">Pipelines de contenido</div>
+        <div class="wf-text">Genera assets completos para redes sociales en un comando.</div>
+      </div>
+      <div class="wf-card">
+        <div class="wf-label">Experimentación</div>
+        <div class="wf-text">Prueba múltiples estilos rápidamente para elegir el mejor.</div>
       </div>
     </div>
   </div>
 
-  <!-- CTA FINAL -->
+  <!-- SECTION 7: TIPS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">07</div>
+      <div class="section-title">Tips</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="font-size:18px;">!</div>
+        <div class="step-body">
+          <h3>Si Claude hace algo incorrecto — díselo</h3>
+          <p>Claude se adapta rápido. Ejemplo:</p>
+          <div class="code-block comment"><code>Do not generate yet. Show prompts first.</code></div>
+          <p style="margin-top:10px; font-size:11px; color:#666;">También puedes agregar reglas permanentes a tu CLAUDE.md.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: ISSUES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">08</div>
+      <div class="section-title">Problemas comunes</div>
+    </div>
+    <div class="issues">
+      <div class="issue">
+        <div class="issue-title">Claude no puede abrir Higgsfield</div>
+        <div class="issue-body">
+          Verifica el MCP:
+          <div class="code-block" style="margin-top:8px;"><code>/mcp</code></div>
+          Si no aparece playwright, reinstala:
+          <div class="code-block" style="margin-top:8px;"><code>claude mcp add playwright npx '@playwright/mcp@latest'</code></div>
+          Luego reinicia Claude.
+        </div>
+      </div>
+      <div class="issue">
+        <div class="issue-title">Claude abre un navegador nuevo</div>
+        <div class="issue-body">
+          Esto es normal. Playwright usa un navegador controlado — no tu Chrome personal.
+          Inicia sesión en Higgsfield desde ese navegador controlado.
+        </div>
+      </div>
+      <div class="issue">
+        <div class="issue-title">Claude genera antes de tiempo</div>
+        <div class="issue-body">
+          Dile:
+          <div class="code-block" style="margin-top:8px;"><code>Wait for confirmation.</code></div>
+          O agrega la regla a tu CLAUDE.md para que aplique siempre.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: QUICK START -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">09</div>
+      <div class="section-title">Quick Start</div>
+    </div>
+    <div class="quickstart">
+      <ol>
+        <li>Instalar Claude Code</li>
+        <li>Crear CLAUDE.md</li>
+        <li>Instalar Playwright MCP</li>
+        <li>Probar control del navegador</li>
+        <li>Probar control de Higgsfield</li>
+        <li>Ejecutar tu workflow</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- SECTION 10: KEY IDEA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <div class="section-title">La idea clave</div>
+    </div>
+    <div class="key-idea">
+      <h2>
+        Claude Code no es solo un chatbot.<br>
+        Es un <span>motor de workflows</span>.
+      </h2>
+      <p style="font-size:12px; color:var(--muted); line-height:1.8;">
+        CLAUDE.md define el comportamiento · Playwright le da manos · Juntos permiten automatización total.
+      </p>
+      <div class="flow">
+        <div class="flow-step">Idea</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step highlight">Claude</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">Generación</div>
+      </div>
+      <p style="font-size:11px; color:#555; margin-top:16px; letter-spacing:1px;">
+        Claude se convierte en tu operador IA.
+      </p>
+    </div>
+  </div>
+
+  <!-- CTA -->
   <div class="cta-section">
-    <h2>¿Listo para crear contenido <span>cinematográfico</span>?</h2>
-    <p>
-      Con Higgsfield + MaestrIA transformas cualquier marca en una experiencia visual de alto impacto.<br>
-      Comienza hoy — el primer video lo hacemos juntos.
-    </p>
+    <p>¿Listo para automatizar tu producción de contenido cinematográfico?</p>
     <div class="cta-buttons">
       <a class="btn btn-primary" href="https://higgsfield.ai" target="_blank" rel="noopener">
         Abrir Higgsfield
       </a>
-      <a class="btn btn-secondary" href="https://wa.me/524775342897?text=Hola%2C%20quiero%20comenzar%20con%20MaestrIA" target="_blank" rel="noopener">
-        Contactar a MaestrIA
+      <a class="btn btn-secondary" href="https://wa.me/524775342897?text=Hola%2C%20quiero%20configurar%20Claude%20Code%20con%20Higgsfield" target="_blank" rel="noopener">
+        Contactar MaestrIA
       </a>
     </div>
   </div>
 
   <div class="footer-note">
-    MaestrIA — Contenido Visual con IA · <span>Guía Higgsfield</span> · 2026
+    MaestrIA · <span>Claude Code + Higgsfield Setup Guide</span> · 2026
   </div>
 
 </div>
